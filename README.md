@@ -5,6 +5,8 @@ Biomedical named-entity recognition following the all-in-one NER scheme. The scr
 The data used for training is also provided with slight modifications. In particular, we found some overlaps between one of the test sets and the merged training set; in this repository, there are no overlaps.
 
 **Table of contents**
+
+- [A note on language](#a-note-on-language)
 - [Core biomedical entities](#core-biomedical-entities)
 - [Additional biomedical entities](#additional-biomedical-entities)
 - [Model files](#model-files)
@@ -12,6 +14,10 @@ The data used for training is also provided with slight modifications. In partic
 - [Visualisation](#visualisation)
 - [References](#references)
 
+
+## A note on language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 ## Core biomedical entities
 
