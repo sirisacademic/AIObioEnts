@@ -13,6 +13,7 @@ The data used for training is also provided with slight modifications. In partic
 - [Usage](#usage)
 - [Visualisation](#visualisation)
 - [References](#references)
+- [Changelog](#changelog)
 
 
 ## A note on language
@@ -110,3 +111,7 @@ We provide an [example notebook](./notebooks/visualise_examples.ipynb) that uses
 [[1] Ling Luo, Chih-Hsuan Wei, Po-Ting Lai, Robert Leaman, Qingyu Chen, and Zhiyong Lu. "AIONER: All-in-one scheme-based biomedical named entity recognition using deep learning." Bioinformatics, Volume 39, Issue 5, May 2023, btad310.](https://doi.org/10.1093/bioinformatics/btad310)
 
 [AIONER_repo]: https://github.com/ncbi/AIONER
+
+## Changelog
+
+All notable changes to this project will be documented in the 📝 [CHANGELOG](CHANGELOG.md) file, and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
