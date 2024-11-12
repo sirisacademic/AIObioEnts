@@ -8,7 +8,6 @@ Pubtator file evaluation, used for test file evaluation
 """
 import copy
 import argparse
-import pandas as pd
 
 #if overlap 
 def strict_mention_metric(pre_result, gold_result):
@@ -54,9 +53,6 @@ def strict_mention_metric(pre_result, gold_result):
         
     print('........strict metrics.........')            
     print(strict_Metrics)
-    
-    results = []
-    
     TP,Gold_num,Pre_num=0,0,0
     for ele in strict_Metrics.keys():
         if strict_Metrics[ele][2]==0:
@@ -76,8 +72,6 @@ def strict_mention_metric(pre_result, gold_result):
         Pre_num+=strict_Metrics[ele][2]
         # print(ele+': P/R/F=%.5f/%.5f/%.5f' % (p,r,f1))
         print(ele+': P/R/F=%.2f/%.2f/%.2f' % (p*100,r*100,f1*100))
-
-        results.append([ele, p*100,r*100,f1*100])
         
         # break
     if Pre_num==0:
@@ -88,19 +82,12 @@ def strict_mention_metric(pre_result, gold_result):
     strict_F1=2*strict_P*strict_R/(strict_P+strict_R)
     # print("Overall: P/R/F=%.5f/%.5f/%.5f"% (strict_P,strict_R,strict_F1))
     print("Overall: P/R/F=%.2f/%.2f/%.2f"% (strict_P*100,strict_R*100,strict_F1*100))
-
-    results.append(['overall', strict_P*100,strict_R*100,strict_F1*100])
-
-    results1 = pd.DataFrame(results, columns=['entity', 'P', 'R', 'F'])
-    results1['type'] = 'strict'
+    
     
     
     print('........relaxed metrics.........')            
     print(relaxed_Metrics)
     pTP,rTP,Gold_num,Pre_num=0,0,0,0
-
-    results = []
-    
     for ele in relaxed_Metrics.keys():
         if relaxed_Metrics[ele][2]==0:
             p=0
@@ -121,9 +108,6 @@ def strict_mention_metric(pre_result, gold_result):
         # print(ele+': P/R/F=%.5f/%.5f/%.5f' % (p,r,f1))
         print(ele+': P/R/F=%.2f/%.2f/%.2f' % (p*100,r*100,f1*100))
         # break
-
-        results.append([ele, p*100,r*100,f1*100])
-        
     if Pre_num==0:
         relaxed_P=0
     else:
@@ -132,14 +116,6 @@ def strict_mention_metric(pre_result, gold_result):
     relaxed_F1=2*relaxed_P*relaxed_R/(relaxed_P+relaxed_R)
     # print("Overall: P/R/F=%.5f/%.5f/%.5f"% (relaxed_P,relaxed_R,relaxed_F1))
     print("Overall: P/R/F=%.2f/%.2f/%.2f"% (relaxed_P*100,relaxed_R*100,relaxed_F1*100))
-
-    results.append(['overall', relaxed_P*100,relaxed_R*100,relaxed_F1*100])
-
-    results2 = pd.DataFrame(results, columns=['entity', 'P', 'R', 'F'])
-    results2['type'] = 'relaxed'
-
-    results = pd.concat([results1, results2], ignore_index=True)
-    results.to_pickle('../notebooks/results.pkl')
 
 def pubtatorfile_eva(goldfile,prefile):
    
