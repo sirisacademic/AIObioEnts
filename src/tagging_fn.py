@@ -26,11 +26,12 @@ def post_process_entities(text, entities, pipeline):
 
 def process_one_sentence(sentence, pipeline, entity_type='ALL'):
     entity_tag = '<{}>'.format(entity_type)
+    closing_tag = '</{}>'.format(entity_type)
     offset = len(entity_tag)
     
-    results = pipeline(entity_tag + sentence)
+    results = pipeline(entity_tag + sentence + closing_tag)
 
-    index_offset = min([i for i, x in enumerate(pipeline.tokenizer.tokenize(entity_tag + sentence)) if x=='>'])
+    index_offset = min([i for i, x in enumerate(pipeline.tokenizer.tokenize(entity_tag + sentence + closing_tag)) if x=='>'])
 
     for token in results:
         token['start'] -= offset
@@ -124,12 +125,12 @@ def list_labels(text, pipeline, entity_type='ALL'):
 
 def tag_json(input_file, output_file, pipeline, entity_type='ALL'):
 
-    df = pd.read_json(input_file)
+    df = pd.read_json(input_file, lines=True)
 
     id, text = df.columns
 
     df['label'] = df[text].progress_apply(lambda x: list_labels(x, pipeline, entity_type))
 
-    df.to_json(output_file, lines=True)
+    df.to_json(output_file, orient='records', lines=True)
 
     return

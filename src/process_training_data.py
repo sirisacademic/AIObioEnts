@@ -153,8 +153,6 @@ def preprocess_punctuation(raw_text: str, labels: list):
 def get_tokens_with_entities(raw_text: str, labels: list):
     raw_text = preprocess_punctuation(raw_text, labels)
     entity_type = raw_text.split()[0][1:-1]
-    if entity_type == 'ALL':
-        print()
     raw_tokens = re.split(r"\s(?![^\{]*\})", raw_text)
     entity_value_pattern = r"\{(?P<value>.+?)\}\[(?P<entity>.+?)\]"
     entity_value_pattern_compiled = re.compile(entity_value_pattern, flags=re.I|re.M)
