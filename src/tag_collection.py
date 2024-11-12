@@ -19,13 +19,11 @@ if __name__=="__main__":
     entity_type = args.entity
     file_type = args.type
 
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, use_fast=True, add_prefix_space=True, trim_offsets=True, model_max_length=512)
-    model = AutoModelForTokenClassification.from_pretrained(MODEL_PATH)
-    pipe = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="none", device=0) # pass device=0 if using gpu
+    pipe = pipeline('ner', model=MODEL_PATH, aggregation_strategy='none', device=0) # pass device=0 if using gpu
 
     if file_type == 'pubtator':
         tag_pubtator(infile, outfile, pipe, entity_type=entity_type)
-    elif file_type == 'json':
+    elif file_type == 'jsonl':
         tag_json(infile, outfile, pipe, entity_type=entity_type)
     else:
         print('text collection file type not supported')
