@@ -109,6 +109,21 @@ We provide an [example notebook](./notebooks/visualise_examples.ipynb) to visual
 
 ![Visualisation of entities from a PubMed publication](./img/visualisation.png)
 
+## Dependencies
+
+The processing, training and inference scripts have been tested with
+````
+transformers==4.45.2
+spacy==3.7.2
+datasets==3.0.1
+evaluate==0.4.3
+numpy==2.1.3
+pandas==2.2.3
+tqdm==4.66.5
+````
+
+Additionally, the visualisation notebook requires `ipymarkup` (tested on `v0.9.0`).
+
 ## References
 
 [[1] Ling Luo, Chih-Hsuan Wei, Po-Ting Lai, Robert Leaman, Qingyu Chen, and Zhiyong Lu. "AIONER: All-in-one scheme-based biomedical named entity recognition using deep learning." Bioinformatics, Volume 39, Issue 5, May 2023, btad310.](https://doi.org/10.1093/bioinformatics/btad310)
