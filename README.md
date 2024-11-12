@@ -1,8 +1,6 @@
 # AIObioEnts: All-in-one biomedical entities
 
-Biomedical named-entity recognition following the all-in-one NER scheme. The scripts in this repository are taken from the original [AIONER repository][AIONER_repo], with slight modifications in order to make them able to run with the latest package versions, in addition to removing some options and accommodating additional pre-trained models. If you use these models, please cite both this and the original AIONER repository, plus the [AIONER paper](https://doi.org/10.1093/bioinformatics/btad310).
-
-The data used for training is also provided with slight modifications. In particular, we found some overlaps between one of the test sets and the merged training set; in this repository, there are no overlaps.
+Biomedical named-entity recognition following the all-in-one NER (AIONER) scheme introduced by [Luo *et al.*](https://doi.org/10.1093/bioinformatics/btad310). This is a straightforward Hugging-Face-compatible implementation without using a decoding head for ease of integration with other pipelines.
 
 **Table of contents**
 
@@ -22,7 +20,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Core biomedical entities
 
-We have retrained the original implementation based on the BioRED dataset, along with additional BioRED-consistent datasets:
+We have followed the original original AIONER training pipeline based on the BioRED dataset along with additional BioRED-compatible datasets:
 - Gene: GNormPlus, NLM-Gene, DrugProt
 - Disease: BC5CDR, NCBI Disease
 - Chemical: BC5CDR, NLM-Chem, DrugProt
@@ -30,8 +28,7 @@ We have retrained the original implementation based on the BioRED dataset, along
 - Variant: tmVar
 - Cell line: BioID
 
-using four pre-trained language models as a base:
-- [BiomedBERT-base pre-trained on abstracts from PubMed; the best-performing model reported in the original AIONER paper](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract)
+using three pre-trained language models as a base:
 - [BiomedBERT-base pre-trained on both abstracts from PubMed and full-texts articles from PubMedCentral](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext)
 - [BioLinkBERT-base](https://huggingface.co/michiyasunaga/BioLinkBERT-base)
 - [BioLinkBERT large](https://huggingface.co/michiyasunaga/BioLinkBERT-large)
@@ -41,76 +38,80 @@ using four pre-trained language models as a base:
 
 The F1 scores of the current implementation on the BioRED test set are shown below:
 
-|               | **BiomedBERT-base abstract** | **BiomedBERT-base abstract+fulltext** | **BioLinkBERT-base** | **BioLinkBERT-large** |
-| ------------- | :--------------------------: | :-----------------------------------: | :------------------: | :-------------------: |
-| **Cell line** |            88.66             |                 92.93                 |        91.67         |         93.75         |
-| **Chemical**  |            92.61             |                 93.04                 |        92.97         |         94.01         |
-| **Disease**   |            88.89             |                 88.40                 |        88.17         |         88.90         |
-| **Gene**      |            94.82             |                 94.59                 |        95.84         |         96.02         |
-| **Species**   |            96.34             |                 96.72                 |        97.97         |         96.70         |
-| **Variant**   |            93.81             |                 94.17                 |        93.72         |         95.00         |
-| **Overall**   |          **92.28**           |               **92.68**               |      **93.14**       |       **93.69**       |
+|               | **BiomedBERT-base abstract+fulltext** | **BioLinkBERT-base** | **BioLinkBERT-large** |
+| ------------- | :-----------------------------------: | :------------------: | :-------------------: |
+| **Cell line** |                 **96.97**                 |        79.60         |         91.49         |
+| **Chemical**  |                 91.28                 |        90.93         |         **94.01**         |
+| **Disease**   |                 87.87                 |        88.51         |         **88.55**         |
+| **Gene**      |                 92.78                 |        93.12         |         **94.51**         |
+| **Species**   |                 96.94                 |        96.68         |         **97.06**         |
+| **Variant**   |                 86.60                 |        85.19         |         **88.57**         |
+|  |  |  |  |
+| **Overall**   |               91.26               |      91.11       |       **92.16**       |
 
+We have used the original evaluation script provided in the 
+[AIONER repository](https://github.com/ncbi/AIONER), which we provide here for completeness.
 
-## Additional biomedical entities
+## Additional biomedical entities (in progress)
 
-We fine-tune the models using a modified version of the latest release of the [AnatEM](https://nactem.ac.uk/anatomytagger/#AnatEM) corpus, including only selected entities that are of interest to us: *cell component*, *tissue*, *organ*, *multi-tissue structure*, and *organ*, along with the newly-introduced *cancer*. 
-
-**F1 scores**
-
-The F1 scores for the 4 models on the test set of this modified dataset are shown below:
-
-|                            | **BiomedBERT-base abstract** | **BiomedBERT-base abstract+fulltext** | **BioLink-base** | **BioLink-large** |
-| -------------------------- | :--------------------------: | :-----------------------------------: | :--------------: | :---------------: |
-| **Cell component**         |            85.00             |                 82.54                 |      76.72       |       84.25       |
-| **Tissue**                 |            70.92             |                 70.82                 |      71.95       |       72.19       |
-| **Cancer**                 |            87.36             |                 84.13                 |      88.29       |       86.56       |
-| **Organ**                  |            74.74             |                 76.47                 |      77.01       |       81.94       |
-| **Multi-tissue structure** |            67.87             |                 67.36                 |      72.77       |       77.96       |
-| **Overall**                |          **79.29**           |               **77.86**               |    **80.60**     |     **81.30**     |
-
+We will fine-tune the models using a modified version of the latest release of the [AnatEM](https://nactem.ac.uk/anatomytagger/#AnatEM) corpus, and a subset of entities that are of interest to us.
 
 ## Model files
 
-All the 8 trained models can be downloaded from [HuggingFace](https://huggingface.co/datasets/SIRIS-Lab/AIObioEnts-model_files/). The pre-trained models can be obtained from the links above.
+All the trained models can be downloaded from Hugging Face.
+
+### Core
+- [BiomedBERT-base abstract+fulltext](https://huggingface.co/SIRIS-Lab/AIObioEnts-core-pubmedbert-full)
+- [BioLinkBERT-base](https://huggingface.co/SIRIS-Lab/AIObioEnts-core-biolink-base)
+- [BioLinkBERT-large](https://huggingface.co/SIRIS-Lab/AIObioEnts-core-biolink-large)
+
+### AnatEM (in progress)
 
 ## Usage
 
-All steps work exactly as with the original scripts, differing in two aspects:
-- The `decoder` parameter has been removed and only CRF is used
-- The type of model can be any of `pubmedbert`, `pubmedbert_full`, `biolink_base`, `biolink_large`
+**Inference**
 
-**Training example**
+The models can be directly used from HuggingFace in a NER pipeline. However, we note that, since additional `'O'` labels are used in the scheme, the outputs should be postprocessed. We provide [helper functions](./src/tagging_fn.py) to tag individual texts:
 
-````bash
-python AIONER_Training.py -t ../data/conll/ALL_TRAIN/ALL_TRAIN.conll -e pubmedbert -o ../models/pubmedbert/
+````python
+from tagging_fn import process_one_text
+from transformers import pipeline
+
+pipe = pipeline('ner', model='SIRIS-Lab/AIObioEnts-core-pubmedbert-full', aggregation_strategy='none', device=0)
+
+process_one_text(text_to_tag, pipeline=pipe, entity_type='ALL')
 ````
 
-**Fine-tuning example**
+Alternatively, you may use the provided script to tag a collection of texts in `pubtator` or `jsonl` format.
 
 ````bash
-python AIONER_FineTune.py -t ../data/AnatEM/conll/AnaTEM_selected_train.conll -d ../data/AnatEM/conll/AnaTEM_selected_dev.conll -v ../vocab/AnatEM_selected_label.vocab -m pubmedbert -o ../models/AnatEM/pubmedbert/
+python tag_collection.py -t collectionType -i inputFile -o outputFile -m trainedModel -e entityType
 ````
+Here, the trained model path may be either a HF model or your own local path. For `jsonl` input, the data is assumed to have an id and a text field, in that order. The output file will contain these 2 fields plus `'label'`, corresponding to a list of lists of the form `[start_index, end_index, entity_type]` for each of the texts.
 
-**Inference example**
+**Training a model**
+
+To retrain your own model using the same or other data, you can use
 
 ````bash
-python AIONER_Run.py -i ../data/AnatEM/pubtator/ -m ../models/AnatEM/pubmedbert/pubmedbert-best-finetune.h5 -v ../vocab/AnatEM_selected_label.vocab -e ALL -o path_to_output_folder
+python train_model.py -m pretrainedModel -d dataDir -v vocab -o outputDir -l learningRate -n nEpochs
 ````
+Here, the input data is assumed to be in `jsonl` format as above, including the annotations as lists of lists, and the `vocab` file contains the AIONER labels.
 
-Please refer to the [AIONER repository][AIONER_repo] for further details.
+The [preprocessing script](./src/process_training_data.py) provides a function to transform `pubtator` data into `jsonl`.
+
+**Fine-tuning (in progress)**
+
 
 ## Visualisation
 
-We provide an [example notebook](./notebooks/visualise_examples.ipynb) that uses [spaCy](https://spacy.io/) to visualise model outputs on plain text using a sample from a collection of title+abstract from [500 recent PubMed publications](./data/PubMed_Jun24/PubMed_Jun24.csv).
+We provide an [example notebook](./notebooks/visualise_examples.ipynb) to visualise model outputs on plain text using a sample from a collection of title+abstract from [500 recent PubMed publications](./data/PubMed_Jun24/PubMed_Jun24.csv).
 
 ![Visualisation of entities from a PubMed publication](./img/visualisation.png)
 
 ## References
 
 [[1] Ling Luo, Chih-Hsuan Wei, Po-Ting Lai, Robert Leaman, Qingyu Chen, and Zhiyong Lu. "AIONER: All-in-one scheme-based biomedical named entity recognition using deep learning." Bioinformatics, Volume 39, Issue 5, May 2023, btad310.](https://doi.org/10.1093/bioinformatics/btad310)
-
-[AIONER_repo]: https://github.com/ncbi/AIONER
 
 ## Changelog
 
