@@ -10,6 +10,9 @@ Icon
 # Thumbnails
 ._*
 
+# Visual Studio
+.vs
+
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
