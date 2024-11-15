@@ -40,21 +40,39 @@ The F1 scores of the current implementation on the BioRED test set are shown bel
 
 |               | **BiomedBERT-base abstract+fulltext** | **BioLinkBERT-base** | **BioLinkBERT-large** |
 | ------------- | :-----------------------------------: | :------------------: | :-------------------: |
-| **Cell line** |                 **96.97**                 |        79.60         |         91.49         |
-| **Chemical**  |                 91.28                 |        90.93         |         **94.01**         |
-| **Disease**   |                 87.87                 |        88.51         |         **88.55**         |
-| **Gene**      |                 92.78                 |        93.12         |         **94.51**         |
-| **Species**   |                 96.94                 |        96.68         |         **97.06**         |
-| **Variant**   |                 86.60                 |        85.19         |         **88.57**         |
+| **Cell line** |                 **96.91**                 |        89.58         |         91.84         |
+| **Chemical**  |                 **92.02**                 |        92.01         |         91.46         |
+| **Disease**   |                 88.64                 |        **89.43**         |         87.82         |
+| **Gene**      |                 94.41                 |        95.18         |         **95.64**         |
+| **Species**   |                 **97.59**                 |        97.47         |         97.46         |
+| **Variant**   |                 89.58                 |        **90.87**         |         90.16         |
 |  |  |  |  |
-| **Overall**   |               91.26               |      91.11       |       **92.16**       |
+| **Overall**   |               92.44              |      **92.87**       |       92.46       |
 
 We have used the original evaluation script provided in the 
 [AIONER repository](https://github.com/ncbi/AIONER), which we provide here for completeness.
 
-## Additional biomedical entities (in progress)
+## Additional biomedical entities
 
-We will fine-tune the models using a modified version of the latest release of the [AnatEM](https://nactem.ac.uk/anatomytagger/#AnatEM) corpus, and a subset of entities that are of interest to us.
+### AnatEM
+
+We fine-tuned the models using a modified version of the latest release of the [AnatEM](https://nactem.ac.uk/anatomytagger/#AnatEM) corpus, and a subset of entities that are of interest to us: *cell*, *cell component*, *tissue*, *muti-tissue structure*, and *organ*, along with the newly-introduced *cancer*.
+
+**F1 scores**
+
+The F1 scores for the 4 models on the test set of this modified dataset are shown below:
+
+|                            | **BiomedBERT-base abstract+fulltext** | **BioLink-base** | **BioLink-large** |
+| -------------------------- | :-----------------------------------: | :--------------: | :---------------: |
+| **Cell**                   |                 87.76                 |      87.06       |       **89.28**       |
+| **Cell component**         |                 **81.74**                 |      79.09       |       81.23       |
+| **Tissue**                 |                 72.26                 |      72.39       |       **74.49**       |
+| **Cancer**                 |                 **89.29**                 |      88.34       |       88.35       |
+| **Organ**                  |                 84.18                 |      **85.04**       |       81.02       |
+| **Multi-tissue structure** |                 72.65                 |      71.60       |       **72.98**       |
+|  |  |  |  |
+| **Overall**                |               84.22               |    83.46     |     **84.39**     |
+
 
 ## Model files
 
@@ -65,11 +83,14 @@ All the trained models can be downloaded from Hugging Face.
 - [BioLinkBERT-base](https://huggingface.co/SIRIS-Lab/AIObioEnts-core-biolink-base)
 - [BioLinkBERT-large](https://huggingface.co/SIRIS-Lab/AIObioEnts-core-biolink-large)
 
-### AnatEM (in progress)
+### AnatEM
+- [BiomedBERT-base abstract+fulltext](https://huggingface.co/SIRIS-Lab/AIObioEnts-AnatEM-pubmedbert-full)
+- [BioLinkBERT-base](https://huggingface.co/SIRIS-Lab/AIObioEnts-AnatEM-biolink-base)
+- [BioLinkBERT-large](https://huggingface.co/SIRIS-Lab/AIObioEnts-AnatEM-biolink-large)
 
 ## Usage
 
-**Inference**
+### Inference
 
 The models can be directly used from HuggingFace in a NER pipeline. However, we note that, since additional `'O'` labels are used in the scheme, the outputs should be postprocessed. We provide [helper functions](./src/tagging_fn.py) to tag individual texts:
 
@@ -89,7 +110,7 @@ python tag_collection.py -t collectionType -i inputFile -o outputFile -m trained
 ````
 Here, the trained model path may be either a HF model or your own local path. For `jsonl` input, the data is assumed to have an id and a text field, in that order. The output file will contain these 2 fields plus `'label'`, corresponding to a list of lists of the form `[start_index, end_index, entity_type]` for each of the texts.
 
-**Training a model**
+### Training a model
 
 To retrain your own model using the same or other data, you can use
 
@@ -100,7 +121,9 @@ Here, the input data is assumed to be in `jsonl` format as above, including the 
 
 The [preprocessing script](./src/process_training_data.py) provides a function to transform `pubtator` data into `jsonl`.
 
-**Fine-tuning (in progress)**
+### Fine-tuning
+
+Same as above, with the corresponding data and `vocab` file. For fine-tuning, the standard token classification is used, without additional `'O'` labels. See the [AnatEM `vocab` file](./vocab/AnatEM_label.vocab) for more details.
 
 
 ## Visualisation

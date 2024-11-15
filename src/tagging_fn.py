@@ -4,6 +4,8 @@ import pandas as pd
 from tqdm.autonotebook import tqdm
 import spacy
 
+from ipymarkup import show_span_box_markup
+
 tqdm.pandas()
 
 nlp = spacy.load('en_core_web_lg')
@@ -47,7 +49,8 @@ def process_one_text(text, pipeline, entity_type='ALL'):
     results = []
     offset = 0
     for sentence in doc.sents:
-        to_tag = sentence.text
+        to_tag = sentence.text_with_ws # preserve white space, otherwise if fails when sentences are separated by more than one
+        
         result = process_one_sentence(to_tag, pipeline, entity_type)
 
         if offset>0:
@@ -57,7 +60,7 @@ def process_one_text(text, pipeline, entity_type='ALL'):
 
         results.extend(result)
         
-        offset += 1
+        # offset += 1
         offset += len(to_tag)
 
     for entity in results:

@@ -1,0 +1,13 @@
+O
+B-Tissue
+I-Tissue
+B-Cancer
+I-Cancer
+B-CellularComponent
+I-CellularComponent
+B-Organ
+I-Organ
+B-MultiTissueStructure
+I-MultiTissueStructure
+B-Cell
+I-Cell
