@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- AnatEM data files
 - Original PubTator training data
+
+### Fixed
+
+- Tagging script yielded incorrect spans when text contained double spaces. Now trailing space in sentences is preserved
 
 ### Removed
 
