@@ -20,7 +20,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Core biomedical entities
 
-We have followed the original original AIONER training pipeline based on the BioRED dataset along with additional BioRED-compatible datasets:
+We have followed the original AIONER training pipeline based on the BioRED dataset along with additional BioRED-compatible datasets:
 - Gene: GNormPlus, NLM-Gene, DrugProt
 - Disease: BC5CDR, NCBI Disease
 - Chemical: BC5CDR, NLM-Chem, DrugProt
@@ -60,7 +60,7 @@ We fine-tuned the models using a modified version of the latest release of the [
 
 **F1 scores**
 
-The F1 scores for the 4 models on the test set of this modified dataset are shown below:
+The F1 scores for the 3 models on the test set of this modified dataset are shown below:
 
 |                            | **BiomedBERT-base abstract+fulltext** | **BioLink-base** | **BioLink-large** |
 | -------------------------- | :-----------------------------------: | :--------------: | :---------------: |
